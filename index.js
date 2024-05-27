@@ -12,10 +12,11 @@ app.get('/url', (req, res) => {
   
   const { access_token } = req.oauth;
   console.log(access_token);
-  axios.defaults.headers.post['Authorization'] = `Bearer ${access_token}`;
+  axios.defaults.headers.get['Authorization'] = `Bearer ${access_token}`;
 
-  axios.post(process.env.API_URL).then(response => {
+  axios.get(process.env.API_URL).then(response => {
     console.log(response)
+    if(response == '') return res.send('The user no has information')
     res.send(response);
   }).catch( err => {
     console.log(err);
