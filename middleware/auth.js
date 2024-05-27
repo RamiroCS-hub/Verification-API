@@ -14,12 +14,16 @@ const auth = (req, res, next) => {
     'redirect_uri': process.env.REDIRECT_URL,
     'audience': 'htpps://RS-256-api'
   }).then(res => {
-    console.log('Todo fue bien')
-    req.oauth = res.data
-    next()
+    console.log('Todo fue bien');
+    req.oauth = res.data;
+    const { access_token } = req.data();
+    console.log(access_token)
+    axios.defaults.headers.get['Authorization'] = `Bearer ${access_token}`;
+    axios.defaults.headers.post['Authorization'] = `Bearer ${access_token}`;
+    next();
   }).catch(err => {
     console.log(err);
-    res.status(403).send('Something went wrong')
+    res.status(403).send('Something went wrong');
   })
 }
 
