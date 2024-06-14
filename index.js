@@ -2,21 +2,27 @@ import express from 'express';
 import dotenv from 'dotenv';
 import axios from 'axios';
 import authPublicEndpoint from './middleware/publicAuth.js';
+import auth from './middleware/auth.js';
+import cors from 'cors'
 const app = express();
-dotenv.config();
 
+//MIDDLEWARES
+dotenv.config();
+app.use(cors())
 app.use(authPublicEndpoint)
 app.use(express.json())
-app.get('/auth', (req, res) => {
 
-  axios.get(`${process.env.API_URL}/auth`).then(response => {
-    console.log(response);
-    if(response == '') return res.send('The user no has information');
-    res.send(response);
-  }).catch( err => {
+//ROUTES
+app.get('/auth', async (req, res) => {
+  try {
+    const response = await axios.get(`${process.env.API_URL}/auth`)
+    console.log(response.data);
+    if(!response || response.status == 206) return res.status(206).json({token: req.oauth, data: response.data});
+    return res.status(200).json({token: req.oauth, data: response.data});
+  } catch (err) {
     console.log(err);
-    res.status(500).send(err);
-  })
+    return res.status(500).send(err);
+  }
 })
 
 app.post('/api', (req, res) => {

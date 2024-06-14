@@ -1,12 +1,13 @@
 import auth from './auth.js';
 
 export const authPublicEndpoint = (req, res, next) => {
-  const token = req.headers['authorization'];
+  var token = req.query.code;
   console.log('El token es:', token);
   if(token) {
-    console.log('El token es:', token);
     auth(req, res, next);
-  }
+    return
+  } 
+
   req.token = undefined;
   req.id = 0;
   next();
