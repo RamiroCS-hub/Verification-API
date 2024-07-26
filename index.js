@@ -16,9 +16,9 @@ app.use(express.json())
 app.get('/auth', async (req, res) => {
   try {
     const response = await axios.get(`${process.env.API_URL}/auth`)
-    console.log(response.data);
-    if(!response || response.status == 206) return res.status(206).json({token: req.oauth, data: response.data});
-    return res.status(200).json({token: req.oauth, data: response.data});
+    console.log(response.data.data);
+    if(!response || response.status == 206) return res.status(206).json({token: req.oauth, data: response.data.data });
+    return res.status(200).json({token: req.oauth, data: response.data.data, message: response.data.message });
   } catch (err) {
     console.log(err);
     return res.status(500).send(err);

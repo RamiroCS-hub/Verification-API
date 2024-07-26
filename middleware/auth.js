@@ -4,7 +4,6 @@ dotenv.config()
 
 const auth = (req, res, next) => {
   var {code, verifier} = req.query;
-  console.log(req.query)
 
   if(!code) return res.status(401).send('Missing authorization code');
   console.log('The code is: ' + code);
